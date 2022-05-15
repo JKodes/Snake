@@ -91,7 +91,7 @@ while playing:
     snake_head_y += snake_direction_y
     head = (snake_head_x, snake_head_y, snake_mass, snake_mass)
 
-#Snake collision with apple causes score to update by one 
+ #Snake collision with apple causes score to update by one 
     if head_rect.colliderect(apple_rect):
         score += 1
 
