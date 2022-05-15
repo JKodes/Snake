@@ -10,11 +10,11 @@ game_window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption('SNAKE')
 
 #Speed of the game
-frame_per_second = 60
+frame_per_second = 25
 clock = pygame.time.Clock()
 
 #Main game elements
-snake_body = 40
+snake_mass = 40
 
 
 snake_head_x = window_width // 2
@@ -44,22 +44,27 @@ game_title_text = font.render('Snake', True, white, purple)
 title_rect = game_title_text.get_rect()
 title_rect.center = (window_width//2, window_height//2)
 
+
 #Score Display For Left Hand Top Corner
 score_display_text = font.render('Score: ' + str(score), True, white, purple )
 score_rect = score_display_text.get_rect()
 score_rect.topleft = (25, 25)
 
+
 #Character's for the game
-
-
-
-
+apple = (300, 300, snake_mass, snake_mass)
+apple_rect = pygame.draw.rect(game_window, blue, apple)
+head = (snake_head_x, snake_head_y, snake_mass, snake_mass)
+head_rect = pygame.draw.rect(game_window, yellow, head)
+snake_body =[]
 
 
 #Play Again Text Display
 play_again_text = font.render("Play Again Hit Any Key", True, white, purple )
 play_again_text_rect = play_again_text.get_rect()
 play_again_text_rect.center = (window_width//2, window_height//2)
+
+
 
 #Main game loop
 playing = True
@@ -68,6 +73,36 @@ while playing:
         if event.type == pygame.QUIT:
             playing = False
 
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                snake_direction_x = -1*snake_mass
+                snake_direction_y =0
+            if event.key == pygame.K_RIGHT:
+                 snake_direction_x = snake_mass
+                 snake_direction_y =0
+            if event.key == pygame.K_UP:
+                 snake_direction_x =0
+                 snake_direction_y =-1*snake_mass
+            if event.key == pygame.K_DOWN:
+                 snake_direction_x =0
+                 snake_direction_y =snake_mass
+
+    snake_head_x += snake_direction_x
+    snake_head_y += snake_direction_y
+    head = (snake_head_x, snake_head_y, snake_mass, snake_mass)
+
+    if head_rect.colliderect(apple_rect):
+        score += 1
+
+    game_window.fill(green)
+    game_window.blit(game_title_text, title_rect)
+    game_window.blit(score_display_text,score_rect)
+
+    head_rect = pygame.draw.rect(game_window, yellow, head)
+    apple_rect = pygame.draw.rect(game_window, blue, apple)
+
+    pygame.display.update()
+    clock.tick(frame_per_second)
 
 
 pygame.display.update()
