@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 
 #Initializer
 pygame.init()
@@ -91,8 +91,15 @@ while playing:
     snake_head_y += snake_direction_y
     head = (snake_head_x, snake_head_y, snake_mass, snake_mass)
 
+#Snake collision with apple causes score to update by one 
     if head_rect.colliderect(apple_rect):
         score += 1
+
+        apple_pos_x = random.randint(0, window_width - snake_mass)
+        apple_pos_y = random.randint(0, window_height - snake_mass)
+        apple = (apple_pos_x, apple_pos_y, snake_mass, snake_mass)
+
+    score_display_text = font.render('Score: ' + str(score), True, white, purple )
 
     game_window.fill(green)
     game_window.blit(game_title_text, title_rect)
