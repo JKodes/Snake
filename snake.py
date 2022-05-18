@@ -60,7 +60,7 @@ snake_body =[]
 
 
 #Play Again Text Display
-play_again_text = font.render("Play Again Hit Any Key", True, white, purple )
+play_again_text = font.render("Play Again Hit Spacebar  Key", True, white, purple )
 play_again_text_rect = play_again_text.get_rect()
 play_again_text_rect.center = (window_width//2, window_height//2)
 
@@ -87,9 +87,43 @@ while playing:
                  snake_direction_x =0
                  snake_direction_y =snake_mass
 
+    snake_body.insert(0, head)
+    snake_body.pop()
+
     snake_head_x += snake_direction_x
     snake_head_y += snake_direction_y
     head = (snake_head_x, snake_head_y, snake_mass, snake_mass)
+
+    #Snake hit wall collision
+    if head_rect.left < 0 or  head_rect.right > window_width or head_rect.top < 0 or head_rect.bottom > window_height:
+        game_window.blit(play_again_text, play_again_text_rect)
+        pygame.display.update()
+
+        reset_game = True
+        while reset_game:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        score =0
+                        snake_head_x = window_width // 2
+                        snake_head_y = window_height //2 + 200
+
+                        head = (snake_head_x, snake_head_y, snake_mass, snake_mass)
+
+                        snake_body =[]
+                        snake_direction_x =0
+                        snake_direction_y =0
+
+                        reset_game = False
+                        if event.type == pygame.QUIT:
+                            reset_game = False
+                            playing = False
+
+                
+
+               
+
+
 
  #Snake collision with apple causes score to update by one 
     if head_rect.colliderect(apple_rect):
@@ -99,11 +133,16 @@ while playing:
         apple_pos_y = random.randint(0, window_height - snake_mass)
         apple = (apple_pos_x, apple_pos_y, snake_mass, snake_mass)
 
+        snake_body.append(head)
+
     score_display_text = font.render('Score: ' + str(score), True, white, purple )
 
     game_window.fill(green)
     game_window.blit(game_title_text, title_rect)
     game_window.blit(score_display_text,score_rect)
+
+    for stomach in snake_body:
+        pygame.draw.rect(game_window, blue, stomach)
 
     head_rect = pygame.draw.rect(game_window, yellow, head)
     apple_rect = pygame.draw.rect(game_window, blue, apple)
